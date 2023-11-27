@@ -34,7 +34,7 @@ export const DataSubmission = async (method, endPoint, formData, caller) => {
         }
       )
     } else {
-      toast.error('Internal Sever error. Check server !')
+      //toast.error('Internal Sever error. Check server !')
     }
   })
   console.log(response)

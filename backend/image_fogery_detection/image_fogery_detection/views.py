@@ -1,9 +1,13 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
+from django.contrib.auth.models import User
+from django.contrib.auth.hashers import make_password
+from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
+from .serializers import *
 import cv2
 import numpy as np
 import base64
@@ -47,7 +51,7 @@ def image_operation(request):
 
         # Perform metadata analysis
         metadata = auxillary_function.analyze_metadata(image)
-
+        
         # Return the metadata
         return JsonResponse({'metadata': metadata})
 
@@ -161,3 +165,27 @@ def encode_text(text):
     encoded_text = base64.b64encode(text.encode('utf-8')).decode('utf-8')
 
     return encoded_text
+
+
+class UserViewSet(viewsets.ModelViewSet):
+
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    def perform_create(self, serializer):
+        print('adding')
+        serializer.save()
+
+    def perform_update(self, serializer):
+        serializer.save()
+
+    def destroy(self, request, id=None):
+        user = User.objects.get(id=id)
+        user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    @api_view(['GET', 'POST'])
+    def users(request):
+        queryset = User.objects.all()
+        serializers = UserSerializer(queryset, many=True)
+        return Response(serializers.data)

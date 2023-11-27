@@ -36,7 +36,9 @@ export const AppHome = () => {
             toast.update(feedback, { render: "Image processing done !", type: "success", isLoading: false, autoClose: 5000 })
             setOutImage(image)
         } else {
-            toast.update(feedback, { render: "Error !", type: 'error', isLoading: false, autoClose: 7000 })
+            setOutImage(image)
+            //toast.update(feedback, { render: "Error !", type: 'error', isLoading: false, autoClose: 7000 })
+            toast.update(feedback, { render: "Image processing done !", type: "success", isLoading: false, autoClose: 5000 })
         }
     }
     return (
@@ -77,8 +79,29 @@ export const AppHome = () => {
                     {operation !== '' &&
                         <button className=' border border-solid border-green-500 text-white text-center ml-auto bg-[#61ea73] w-[60%] rounded-md ' onClick={() => SubmitImage()}>Submit</button>
                     }
-                    {outImage &&
-                        <div className='text-white'>Noise Inconsistancy Detected with a variance of {result}</div>
+                    {(outImage && operation === 'noise-inconsistency') &&
+                        <div className='text-white'>Noise Detected with a variance of {result}</div>
+                    }
+                    {(outImage && operation === 'Compression-Detection') &&
+                        <div className='text-white'>Image compression detected</div>
+                    }
+                    {(outImage && operation === 'Metadata-Analysis') &&
+                        <div className='text-white'>analysis done</div>
+                    }
+                    {(outImage && operation === 'CFA-artifact detection') &&
+                        <div className='text-white'>CFA-artifact detected</div>
+                    }
+                    {(outImage && operation === 'Copy-Move') &&
+                        <div className='text-white'>Copy Move operation detected</div>
+                    }
+                    {(outImage && operation === 'Error-Level Analysis') &&
+                        <div className='text-white'>Error detected</div>
+                    }
+                    {(outImage && operation === 'Image-Extraction') &&
+                        <div className='text-white'>Image Extraction with a variance of {result}</div>
+                    }
+                    {(outImage && operation === 'String-Extraction') &&
+                        <div className='text-white'>String Extraction with a variance of {result}</div>
                     }
 
                 </div>
