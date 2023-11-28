@@ -1,18 +1,27 @@
-import React from 'react'
-import { useState } from 'react'
+import React, { useEffect } from 'react'
+import { useState, useContext } from 'react'
 import { FileInput, SelectInput } from './Utils'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import AuthContext from './AuthContext'
 import { DataSubmission } from './DataSubmission'
+import { jwtDecode } from 'jwt-decode'
 
 export const AppHome = () => {
     const [operation, setOperation] = useState('')
     const [image, setImage] = useState('')
     const [outImage, setOutImage] = useState(null)
     const [result, setResult ] = useState('')
+    let {logoutUser} = useContext(AuthContext)
     let Navigate = useNavigate(null)
+    let [user, setUser] = useState('')
 
-    console.log(image)
+    var auth = localStorage.getItem('authTokens')
+    auth = jwtDecode(auth)
+    useEffect(
+        () => {setUser(auth.username)},
+    [auth])
+
     const operations = [
         { option: 'Compression-Detection' },
         { option: 'Metadata-Analysis' },
@@ -46,11 +55,11 @@ export const AppHome = () => {
             <div className='text-white flex font-semibold text-2xl justify-between w-full h-[12%] bg-[#5a62f7] px-16 pt-2'>
                 <div>
                     <p >Image Fogery Detection System</p>
-                    <p>Welcome : {'Captain'}</p>
+                    <p>Welcome : {user}</p>
                 </div>
 
                 <div>
-                    <p className='text-xl underline cursor-pointer' onClick={() => { Navigate('/login') }}>Logout</p>
+                    <p className='text-xl underline cursor-pointer' onClick={() => { logoutUser() }}>Logout</p>
                 </div>
 
             </div>
