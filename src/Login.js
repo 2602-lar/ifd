@@ -18,10 +18,10 @@ export const Login = () => {
     } else {
       const feedback = toast.loading("Authenticating User")
       let response = await loginUser(username, password)
-      console.log(response.status)
+      console.log(response.code)
       if (response.status === 200) {
         toast.update(feedback, { render: "User authentication succcessful !", type: "success", isLoading: false, autoClose: 4000 })
-      } else if (response.status === 401) {
+      } else if (response.code === 'ERR_BAD_REQUEST') {
         if (response.response.data.detail === 'No active account found with the given credentials') {
           toast.update(feedback, { render: "User authentication failed ! Incorrect details.", type: "error", isLoading: false, autoClose: 7000 })
         }
