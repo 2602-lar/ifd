@@ -173,8 +173,8 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
 
     def perform_create(self, serializer):
-        print('adding')
-        serializer.save()
+        data= dict(serializer.validated_data)
+        serializer.save(password = make_password(data['password']))
 
     def perform_update(self, serializer):
         serializer.save()
